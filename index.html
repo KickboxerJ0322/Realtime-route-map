@@ -1,200 +1,369 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>JR東日本リアルタイム路線図</title>
+    <title>リアルタイム路線図 / JR東日本</title>
     <!-- Google FontsからPoppinsフォントを読み込む -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
       rel="stylesheet"
     />
     <style>
-      /* 全体のリセット */
-      html,
-      body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: #101E10; /* 背景をグレー系に */
-        font-family: "Poppins", sans-serif;
-        color: white;
-      }
-
-      /* ヘッダーをグレー系に(高さ半分程度に) */
-      header {
+        /* 全体のリセット */
+        html,
+        body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          background-color: #000; /* 背景を黒に設定 */
+          font-family: "Poppins", sans-serif;
+          color: white;
+          overflow: hidden; /* スクロールバーを非表示 */
+        }
+      
+        /* ヘッダーを固定し、透過背景に設定 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 56px;
+            width: 100%;
+            z-index: 1002; /* マップより上に表示 */
+            background-color: rgba(0, 0, 0, 0.8); /* 半透明黒 */
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 600;
+            box-sizing: border-box;
+            line-height: 56px; /* ヘッダーの高さに合わせる */
+        }
+      
+        /* ヘッダー内の画像スタイル */
+        header img {
+          width: 30px;
+          height: 30px;
+          margin-right: 10px;
+          border-radius: 50%;
+          margin-top: 0; /* 追加 */
+          margin-bottom: 0; /* 追加 */
+        }
+        header .header-left,
+        header .header-right {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
-        background-color: #003300; /* グレー系 */
-        color: white;
-        padding: 4px 4px;  /* 小さめに */
-        font-weight: 600;
-        font-size: 18px;   /* 少し下げる */
-      }
-      header img {
-        vertical-align: middle;
-        width: 30px;       /* アイコンを小さく */
-        height: 30px;
-        margin-right: 10px;
-        border-radius: 50%;
-      }
-
-      /* ボタン全体をグレー系に */
-      button {
-        background-color: #003300; /* グレー系 */
-        color: #fff;
-        border: 1px solid #006600;
-        padding: 8px 12px;
-        margin: 4px 4px 4px 0;
-        cursor: pointer;
-        border-radius: 4px;
-      }
-      button:hover {
-        background-color: #006600;
-      }
-
-      /* 2カラムレイアウト用のコンテナ */
-      #main-container {
-        display: flex;
-        width: 100%;
-        height: calc(100% - 40px); /* ヘッダー高さが変わったので調整(例: 40px想定) */
-        box-sizing: border-box;
-      }
-
-      /* 左パネル：ボタンや入力フォーム等を配置する */
-      #left-panel {
-        width: 300px; /* 左パネルの固定幅 */
-        padding: 8px;
-        box-sizing: border-box;
-        background-color: #101E10; /* 背景グレー */
-        overflow-y: auto; /* 縦スクロール */
-      }
-
-      /* 右パネル：地図を表示する */
-      #right-panel {
-        flex: 1; /* 残りのスペースを使用 */
-        padding: 8px;
-        box-sizing: border-box;
-        background-color: #101E10; /* 背景グレー */
-      }
-
-      /*
-       3Dマップを右パネル全体に広げ、2Dマップをその上に
-       小さく重ねるためのスタイル
-      */
-      #map-container {
-        position: relative;
-        width: 100%;
-        height: 400px;
-        margin: 0;
-        box-sizing: border-box;
-      }
-
-      /* 3Dマップを右パネル全体に表示 */
-      #map3d {
-        /* position: absolute;
-        top: 0;
-        left: 0; */
-        width: 100%;
-        height: 400px;
-        overflow: hidden;
-        border: 1px solid #101E10;
-      }
-
-      /*
-        2Dマップは小さく、左下に重なるように表示
-        z-indexを上げて最前面にする
-      */
-      #map2d {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        width: 240px;
-        height: 160px;
-        border: 2px solid #101E10;
-        background-color: #fff; /* 重ねるので白背景推奨 */
-        z-index: 9999;
-        display: none;
-      }
-
-      /* テーブルのスタイル (使い回し) */
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 4px;
-        font-size: 12px;
-        color: #fff;
-      }
-      th,
-      td {
-        border: 1px solid #fff;
-        padding: 6px;
-        text-align: center;
-      }
-      th {
-        background-color: #101E10;
-      }
-
-      /* 入力フォームなど */
-      #placeInput {
-        padding: 5px;
-        font-size: 12px;
-        width: 200px; /* 狭くしたい場合は調整 */
-        margin-right: 4px;
-      }
-
-      /* ステータス系テキスト */
-      .status-container {
-        display: inline-block;
-        margin-bottom: 8px;
-        color: white;
-      }
-      .status-text {
-        font-size: 12px;
-      }
-
-      /* 追加オプションの表示/非表示 */
-      #moreOptions {
-        display: none; /* 初期は非表示 */
-        margin-top: 8px;
-      }
-
-      /* autocomplete 用スタイル（必要最低限） */
-      .pac-card {
-        position: absolute;
-        z-index: 1000;
-        display: none;
-      }
-      .pac-controls {
-        display: none;
-      }
-
-      /* Labels on/offボタンなど */
-      #labelsOffButton,
-      #labelsOnButton {
-        margin-left: 0;
-      }
-
-      /* バス停アイコンなどのサンプル */
-      .station-icon {
-        background-color: transparent;
-        width: 20px;
-        height: 20px;
-        border-radius: 5px;
-        border: 2px solid #101E10;
-      }
-
-      /*
-        ★追加: 下部テーブル表示用コンテナ 
-      */
-      #bottom-section {
-        width: 100%;
-        background-color: #101E10; 
-        padding: 8px;
-        box-sizing: border-box;
-      }
-    </style>
+        align-items: center; /* 縦方向の中央揃え */
+        }
+        /* ボタン全体を半透明黒に設定 */
+        button {
+          background-color: rgba(0, 0, 0, 0.6); /* 半透明黒 */
+          border: 1px solid #ccc;
+          color: #fff;
+          padding: 8px 12px;
+          margin: 4px 4px 4px 0;
+          cursor: pointer;
+          border-radius: 4px;
+          font-size: 14px;
+          box-sizing: border-box;
+          width: auto; /* 必要に応じて変更 */
+        }
+      
+        /* ボタンホバー時の背景色変更 */
+        button:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      
+        /* メインコンテナのスタイル */
+        #main-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: block;
+            margin-top: 56px; /* ヘッダーの高さ分下げる */
+            box-sizing: border-box;
+        }
+      
+        /* 左パネルのスタイル */
+        #left-panel {
+          position: fixed;
+          top: 56px; /* ヘッダーの高さ分だけ下へ */
+          left: 0;
+          width: 300px; /* 幅を300pxに設定 */
+          height: calc(100% - 56px);
+          background-color: rgba(0, 0, 0, 0.4); /* 半透明黒 */
+          padding: 4px;
+          box-sizing: border-box;
+          overflow-y: auto;
+          z-index: 1002; /* ヘッダーより上に表示 */
+        }
+        /* 縮小ボタンのスタイル */
+        .leftminimize-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 縮小ボタンホバー時のスタイル */
+        .leftminimize-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 表示ボタンのスタイル */
+        .leftshow-button {
+            position: fixed;
+            top: 56px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 8px 12px;
+            z-index: 1003; /* 他の要素より上に表示 */
+        }
+        
+        /* 表示ボタンホバー時のスタイル */
+        .leftshow-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }   
+        /* 右パネルのスタイル */
+        #right-panel {
+          position: fixed;
+          top: 56px;
+          right: 0;
+          width: 250px;
+          height: calc(100% - 56px);
+          background-color: rgba(0, 0, 0, 0.3); /* 半透明黒 */
+          padding: 10px;
+          box-sizing: border-box;
+          overflow-y: auto;
+          z-index: 1001; /* ヘッダーより上に表示 */
+        }
+      
+        /* 下部セクションのスタイル */
+        #bottom-section {
+          position: fixed;
+          bottom: 0;
+          left: 300px;
+          max-height: 30%;
+          min-width: 500px;
+          background-color: rgba(0, 0, 0, 0.3); /* 半透明黒 */
+          overflow-y: auto;
+          padding: 4px;
+          box-sizing: border-box;
+          z-index: 1001; /* ヘッダーより上に表示 */
+        }
+        /* 縮小ボタンのスタイル */
+        .minimize-button {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 縮小ボタンホバー時のスタイル */
+        .minimize-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 表示ボタンのスタイル */
+        .show-button {
+            position: fixed;
+            bottom: 80px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 8px 12px;
+            z-index: 1003; /* 他の要素より上に表示 */
+        }
+        
+        /* 表示ボタンホバー時のスタイル */
+        .show-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }      
+        /* 3Dマップを画面全体に固定し、背面に配置 */
+        #map-container {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          z-index: 1000; /* マップを最背面に */
+        }
+      
+        /* 3Dマップのスタイル */
+        #map3d {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%; /* 高さを100%に設定 */
+          border: none;
+          margin: 0;
+          padding: 0;
+        }
+      
+        /* 2Dマップのスタイル */
+        #map2d {
+          position: absolute;
+          width: 240px; 
+          height: 160px; 
+          bottom: 10px; 
+          left: 10px; 
+          z-index: 1001; 
+          border: 2px solid #101E10; 
+          background-color: #fff; /* 白背景 */
+          display: none; /* 初期は非表示 */
+        }
+      
+        /* テーブルのスタイル */
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 4px;
+          font-size: 12px;
+          color: #fff;
+        }
+        th,
+        td {
+          border: 1px solid #fff;
+          padding: 6px;
+          text-align: center;
+        }
+        th {
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+      
+        /* 入力フォームのスタイル */
+        #placeInput {
+          padding: 5px;
+          font-size: 12px;
+          width: 200px; /* 幅を200pxに設定 */
+          margin-right: 4px;
+          box-sizing: border-box;
+        }
+      
+        /* ステータス系テキストのスタイル */
+        .status-container {
+          display: inline-block;
+          color: white;
+          right: 0px;
+        }
+        .status-text {
+          font-size: 12px;
+        }
+      
+        /* 追加オプションの表示/非表示スタイル */
+        #moreOptions {
+          display: none; /* 初期は非表示 */
+          margin-top: 8px;
+        }
+      
+        /* autocomplete 用スタイル */
+        .pac-card {
+          position: absolute;
+          z-index: 1000;
+          display: none;
+        }
+        .pac-controls {
+          display: none;
+        }
+      
+        /* Labels on/offボタンのスタイル */
+        #labelsOffButton,
+        #labelsOnButton {
+          margin-left: 0;
+        }
+      
+        /* バス停アイコンのスタイル */
+        .station-icon {
+          background-color: transparent;
+          width: 20px;
+          height: 20px;
+          border-radius: 5px;
+          border: 2px solid #101E10;
+        }
+      
+        /* スマホ対応（横幅が狭い場合はレイアウトを縦並びに） */
+        @media (max-width: 768px) {
+            header {
+                font-size: 16px;
+                padding: 6px 8px;
+                height: 56px; /* ヘッダーの高さを維持 */
+                z-index: 1002; /* ヘッダーのz-indexを維持 */
+              }
+            
+              /* 左パネルと右パネルを縦並びにし、幅を100%に設定 */
+              #left-panel,
+              #right-panel {
+                position: fixed;   /* 固定配置に変更 */
+                top: 56px;         /* ヘッダーの高さ分下へ */
+                left: 0;
+                width: 100%;
+                max-height: 24%;
+                background-color: rgba(0, 0, 0, 0.3); /* 少し濃いめの半透明黒 */
+                overflow-y: auto;
+                padding: 8px;
+                box-sizing: border-box;
+                z-index: 1001;     /* ヘッダーより下に表示 */
+              }
+            
+              /* 下部セクションの幅を100%に設定 */
+              #bottom-section {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0px;
+                max-height: 24%;
+                background-color: rgba(0, 0, 0, 0.3);
+                overflow-y: auto;
+                padding: 4px;
+                box-sizing: border-box;
+                z-index: 1001; /* パネルより上に表示 */
+              }          
+              /* メインコンテナのマージンをリセット */
+              #main-container {
+                margin-top: 0;
+              }
+            
+              /* 2Dマップの位置調整（必要に応じて変更） */
+              #map2d {
+                width: 200px; 
+                height: 140px; 
+                bottom: 60px; /* パネルの上に配置 */
+                left: 10px;
+              }
+        }
+    </style>      
   </head>
   <body>
     <header>
@@ -203,26 +372,26 @@
           src="https://kickboxerj0322.github.io/bus-map-3d/066_icon.png"
           alt="バスレーダーアイコン"
         />
-        JR東日本リアルタイム路線図
+        リアルタイム路線図 / JR東日本
+      </div>
+      <div class="header-right"></div>
+        <p class="status-container">
+            <!-- <span class="status-text">L: <span id="locationStatus">...</span></span><br> -->
+            <!-- &nbsp;|&nbsp; -->
+            <span class="status-text">D: <span id="timestamp">...</span></span>
+        </p>
       </div>
       <!-- ログアウトボタン -->
       <button id="logoutButton">Logout</button>
     </header>
 
     <!-- 2カラムレイアウトのコンテナ -->
-    <div id="main-container">
+    <!-- <div id="main-container"> -->
       <!-- 左パネル（ボタンや入力フォームなど） -->
       <div id="left-panel">
-        <!-- ステータス表示 -->
-        <p class="status-container">
-          <span class="status-text">L: <span id="locationStatus">...</span></span><br>
-          <!-- &nbsp;|&nbsp; -->
-          <span class="status-text">D: <span id="timestamp">...</span></span>
-        </p>
-
-        <!-- 入力フォームとボタン類 -->
-        <!-- ここに各路線ボタンを一覧表示 -->
-        <div id="stationButtonsContainer" style="margin-top: 8px;">
+        <!-- 縮小ボタンを追加 -->
+        <button id="leftminimizeButton" class="leftminimize-button">−</button>
+        <div id="stationButtonsContainer" style="margin-top: 4px;">
             <!-- 後段のスクリプト内で動的にボタンを生成 -->
         </div>
         <div>
@@ -327,7 +496,7 @@
       </div>
 
       <!-- 右パネル（地図を表示する） -->
-      <div id="right-panel">
+      <!-- <div id="right-panel"> -->
         <!-- 2分割: 左に2D、右に3D -->
         <div id="map-container">
           <div id="map2d"></div>
@@ -336,18 +505,45 @@
 
         <!-- ★追加: テーブル表示用の下部セクション -->
         <div id="bottom-section">
+            <!-- 縮小ボタンを追加 -->
+            <button id="minimizeButton" class="minimize-button">−</button>
+  
+            <button id="alertToggleButton" class="small-heading">運行情報</button>
+            <table id="alertTable" style="display: none;">
+              <thead>
+                <tr>
+                  <th>運行情報ID</th>
+                  <th>概要</th>
+                  <th>説明</th>
+                  <th>タイムスタンプ</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+            <button id="tripupdatesButton" class="small-heading">ルート最新情報</button>
+            <table id="tripupdatesTable" style="display: none;">
+              <thead>
+                <tr>
+                  <th>ルート最新情報ID</th>
+                  <th>開始日時</th>
+                  <th>説明</th>
+                  <th>タイムスタンプ</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           <!-- バス結果テーブル表示ボタン -->
-          <button id="busResultsButton" class="small-heading">Vehicle results</button>
-          <table id="dataTable" style="display: table">
+          <button id="busResultsButton" class="small-heading">車両情報</button>
+          <table id="dataTable" style="display: none">
             <thead>
               <tr>
-                <th>Alphabet ID</th>
-                <th>Vehicle ID</th>
-                <th>Lat</th>
-                <th>Lng</th>
-                <th>Date</th>
-                <th>Dest</th>
-                <th>Route</th>
+                <th>アルファベットID</th>
+                <th>車両ID</th>
+                <th>緯度</th>
+                <th>経度</th>
+                <th>日時</th>
+                <th>目的地</th>
+                <th>路線名</th>
                 <!-- <th>Lat (2)</th>
                 <th>Lng (2)</th>
                 <th>Date (2)</th>
@@ -407,40 +603,16 @@
             </thead>
             <tbody></tbody>
           </table>
-          <button id="tripsButton" class="small-heading">Vehicle trips</button>
+          <button id="tripsButton" class="small-heading">到着出発予定</button>
           <div id="vehicleDetails"></div>
-          <table id="tripsTable" style="display: table">
+          <table id="tripsTable" style="display: none">
             <thead>
               <tr>
-                <th>Vehicle ID</th>
-                <th>stop id</th>
+                <th>車両ID</th>
+                <th>駅id</th>
                 <th>駅名</th>
-                <th>arrival_time</th>
-                <th>departure_time</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button id="alertToggleButton" class="small-heading">Alert</button>
-          <table id="alertTable" style="display: none;">
-            <thead>
-              <tr>
-                <th>Alert ID</th>
-                <th>Alert Header</th>
-                <th>Alert Description</th>
-                <th>Timestamp</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-          <button id="tripupdatesButton" class="small-heading">Tripupdates</button>
-          <table id="tripupdatesTable" style="display: none;">
-            <thead>
-              <tr>
-                <th>Trip Update ID</th>
-                <th>Trip Start Time</th>
-                <th>Trip Description</th>
-                <th>Timestamp</th>
+                <th>到着時間</th>
+                <th>出発時間</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -518,7 +690,9 @@
             <tbody></tbody>
           </table> -->
         </div><!-- /#bottom-section -->
-
+        <!-- 表示ボタンを追加（初期は非表示） -->
+        <button id="leftshowButton" class="leftshow-button" style="display: none;">レフト</button>
+        <button id="showButton" class="show-button" style="display: none;">ボトム</button>
         <!-- オートコンプリート用のカード (非表示) -->
         <div class="pac-card" id="pac-card">
           <div id="pac-container">
@@ -541,7 +715,43 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics-compat.js"></script>
     <!-- Firebase Authentication -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-
+    <!-- 縮小・表示ボタンのスクリプト -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const leftpanel = document.getElementById('left-panel');
+            const leftminimizeButton = document.getElementById('leftminimizeButton');
+            const leftshowButton = document.getElementById('leftshowButton');
+    
+            // 縮小ボタンをクリックしたときの処理
+            leftminimizeButton.addEventListener('click', function() {
+              leftpanel.style.display = 'none';
+              leftshowButton.style.display = 'block';
+            });
+    
+            // 表示ボタンをクリックしたときの処理
+            leftshowButton.addEventListener('click', function() {
+              leftpanel.style.display = 'block';
+              leftshowButton.style.display = 'none';
+            });
+        });  
+        document.addEventListener('DOMContentLoaded', function() {
+          const bottomSection = document.getElementById('bottom-section');
+          const minimizeButton = document.getElementById('minimizeButton');
+          const showButton = document.getElementById('showButton');
+  
+          // 縮小ボタンをクリックしたときの処理
+          minimizeButton.addEventListener('click', function() {
+            bottomSection.style.display = 'none';
+            showButton.style.display = 'block';
+          });
+  
+          // 表示ボタンをクリックしたときの処理
+          showButton.addEventListener('click', function() {
+            bottomSection.style.display = 'block';
+            showButton.style.display = 'none';
+          });
+        });
+    </script>
     <!-- Firebaseの初期化 -->
     <script>
       // Firebaseの設定と初期化
@@ -1980,43 +2190,95 @@
         /* showStations(); */
       }
 
+      // 2点間のハーサイン距離を計算する関数（メートル単位）
+      function haversineDistance(lat1, lng1, lat2, lng2) {
+        const R = 6371e3; // 地球の半径（メートル）
+        const φ1 = lat1 * Math.PI / 180;
+        const φ2 = lat2 * Math.PI / 180;
+        const Δφ = (lat2 - lat1) * Math.PI / 180;
+        const Δλ = (lng2 - lng1) * Math.PI / 180;
+
+        const a = Math.sin(Δφ / 2) ** 2 +
+                Math.cos(φ1) * Math.cos(φ2) *
+                Math.sin(Δλ / 2) ** 2;
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        return R * c; // 距離（メートル）
+      }
+
+      // 最初の駅と最後の駅の距離を計算する関数（メートル単位）
+      function calculateMaxDistance(coords) {
+        if (coords.length < 2) return 0; // 駅が1つ以下の場合は距離を0とする
+
+        const firstStation = coords[0];
+        const lastStation = coords[coords.length - 1];
+        return haversineDistance(firstStation.lat, firstStation.lng, lastStation.lat, lastStation.lng);
+      }
+
+      // 路線の最大距離に基づいて適切な高度を計算する関数
+      function computeAltitude(distance) {
+        const screenWidth = window.innerWidth;
+        let FOV;
+        if (screenWidth <= 768) { // タブレットやスマートフォンの場合
+            FOV = 90 * Math.PI / 180; // 例: 90度
+        } else { // デスクトップの場合
+            FOV = 80 * Math.PI / 180; // 例: 75度
+        }
+        const altitude = (distance / 2) / Math.tan(FOV / 2);
+        const maxAltitude = 200000; // 最大高度を100,000メートルに制限
+        return Math.min(altitude, maxAltitude);
+      }
+
       const routesData = [
-            { routeId: 10, routeName: "吾妻線", coords: agatsumaLineCoords, position: agatsumaLineCoords[0], color: "rgba(0, 174, 149, 0.75)" },
-            { routeId: 11, routeName: "中央線快速", coords: chuoRapidLineCoords, position: chuoRapidLineCoords[0], color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 12, routeName: "中央・総武各駅停車", coords: chuoSobuLocalLineCoords, position: chuoSobuLocalLineCoords[0], color: "rgba(255, 229, 0, 0.75)" },
-            { routeId: 13, routeName: "八高線", coords: hachikoLineCoords, position: hachikoLineCoords[0], color: "rgba(160, 157, 149, 0.75)" },
-            { routeId: 14, routeName: "伊東線", coords: itoLineCoords, position: itoLineCoords[0], color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 15, routeName: "五日市線", coords: itsukaichiLineCoords, position: itsukaichiLineCoords[0], color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 16, routeName: "常磐線", coords: jobanLineCoords, position: jobanLineCoords[0], color: "rgba(0, 113, 197, 0.75)" },
-            { routeId: 17, routeName: "常磐線各駅停車", coords: jobanLocalLineCoords, position: jobanLocalLineCoords[0], color: "rgba(158, 158, 159, 0.75)" },
-            { routeId: 18, routeName: "常磐線快速", coords: jobanRapidLineCoords, position: jobanRapidLineCoords[0], color: "rgba(0, 193, 138, 0.75)" },
-            { routeId: 19, routeName: "上越線", coords: joetsuLineCoords, position: joetsuLineCoords[0], color: "rgba(0, 172, 209, 0.75)" },
-            { routeId: 20, routeName: "鹿島線", coords: kashimaLineCoords, position: kashimaLineCoords[0], color: "rgba(168, 95, 18, 0.75)" },
-            { routeId: 21, routeName: "川越線(川越-高麗川間)", coords: kawagoeLineBetweenCoords, position: kawagoeLineBetweenCoords[0], color: "rgba(166, 169, 171, 0.75)" },
-            { routeId: 22, routeName: "京浜東北線・根岸線", coords: keihinTohokuNegishiLineCoords, position: keihinTohokuNegishiLineCoords[0], color: "rgba(0, 167, 227, 0.75)" },
-            { routeId: 23, routeName: "京葉線", coords: keiyoLineCoords, position: keiyoLineCoords[0], color: "rgba(207, 18, 37, 0.75)" },
-            { routeId: 24, routeName: "久留里線", coords: kururiLineCoords, position: kururiLineCoords[0], color: "rgba(0, 195, 167, 0.75)" },
-            { routeId: 25, routeName: "武蔵野線", coords: musashinoLineCoords, position: musashinoLineCoords[0], color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 26, routeName: "南武線", coords: nambuLineCoords, position: nambuLineCoords[0], color: "rgba(255, 228, 0, 0.75)" },
-            { routeId: 27, routeName: "成田線", coords: naritaLineCoords, position: naritaLineCoords[0], color: "rgba(0, 187, 133, 0.75)" },
-            { routeId: 28, routeName: "青梅線", coords: omeLineCoords, position: omeLineCoords[0], color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 29, routeName: "相模線", coords: sagamiLineCoords, position: sagamiLineCoords[0], color: "rgba(0, 139, 139, 0.75)" },
-            { routeId: 30, routeName: "埼京線・川越線", coords: saikyoKawagoeLineCoords, position: saikyoKawagoeLineCoords[0], color: "rgba(0, 172, 132, 0.75)" },
-            { routeId: 31, routeName: "湘南新宿ライン", coords: shonanShinjukuLineCoords, position: shonanShinjukuLineCoords[0], color: "rgba(222, 5, 21, 0.75)" },
-            { routeId: 32, routeName: "総武本線", coords: sobuMainLineCoords, position: sobuMainLineCoords[0], color: "rgba(253, 215, 0, 0.75)" },
-            { routeId: 33, routeName: "総武快速線", coords: sobuRapidLineCoords, position: sobuRapidLineCoords[0], color: "rgba(0, 116, 190, 0.75)" },
-            { routeId: 34, routeName: "相鉄直通線", coords: sotetsuDirectLineCoords, position: sotetsuDirectLineCoords[0], color: "rgba(0, 195, 167, 0.75)" },
-            { routeId: 35, routeName: "外房線", coords: sotoboLineCoords, position: sotoboLineCoords[0], color: "rgba(242, 35, 53, 0.75)" },
-            { routeId: 36, routeName: "高崎線", coords: takasakiLineCoords, position: takasakiLineCoords[0], color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 37, routeName: "東金線", coords: toganeLineCoords, position: toganeLineCoords[0], color: "rgba(179, 28, 49, 0.75)" },
-            { routeId: 38, routeName: "東海道線", coords: tokaidoLineCoords, position: tokaidoLineCoords[0], color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 39, routeName: "鶴見線", coords: tsurumiLineCoords, position: tsurumiLineCoords[0], color: "rgba(255, 229, 0, 0.75)" },
-            { routeId: 40, routeName: "内房線", coords: uchiboLineCoords, position: uchiboLineCoords[0], color: "rgba(0, 113, 197, 0.75)" },
-            { routeId: 41, routeName: "宇都宮線", coords: utsunomiyaLineCoords, position: utsunomiyaLineCoords[0], color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 42, routeName: "山手線", coords: yamanoteLineCoords, position: yamanoteLineCoords[0], color: "rgba(133, 192, 35, 0.75)" },
-            { routeId: 43, routeName: "横浜線", coords: yokohamaLineCoords, position: yokohamaLineCoords[0], color: "rgba(133, 192, 35, 0.75)" },
-            { routeId: 44, routeName: "横須賀線", coords: yokosukaLineCoords, position: yokosukaLineCoords[0], color: "rgba(0, 116, 190, 0.75)" }
+            { routeId: 10, routeName: "吾妻線", coords: agatsumaLineCoords, position: agatsumaLineCoords[0], altitude: 80000, heading: 0, color: "rgba(0, 174, 149, 0.75)" },
+            { routeId: 11, routeName: "中央線快速", coords: chuoRapidLineCoords, position: chuoRapidLineCoords[0], altitude: 80000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+            { routeId: 12, routeName: "中央・総武各駅停車", coords: chuoSobuLocalLineCoords, position: chuoSobuLocalLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
+            { routeId: 13, routeName: "八高線", coords: hachikoLineCoords, position: hachikoLineCoords[0], altitude: 130000, heading: 270, color: "rgba(160, 157, 149, 0.75)" },
+            { routeId: 14, routeName: "伊東線", coords: itoLineCoords, position: itoLineCoords[0], altitude: 50000, heading: 270, color: "rgba(255, 152, 69, 0.75)" },
+            { routeId: 15, routeName: "五日市線", coords: itsukaichiLineCoords, position: itsukaichiLineCoords[0], altitude: 50000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+            { routeId: 16, routeName: "常磐線", coords: jobanLineCoords, position: jobanLineCoords[0], altitude: 150000, heading: 270, color: "rgba(0, 113, 197, 0.75)" },
+            { routeId: 17, routeName: "常磐線各駅停車", coords: jobanLocalLineCoords, position: jobanLocalLineCoords[0], altitude: 70000, heading: 0, color: "rgba(158, 158, 159, 0.75)" },
+            { routeId: 18, routeName: "常磐線快速", coords: jobanRapidLineCoords, position: jobanRapidLineCoords[0], altitude: 90000, heading: 0, color: "rgba(0, 193, 138, 0.75)" },
+            { routeId: 19, routeName: "上越線", coords: joetsuLineCoords, position: joetsuLineCoords[0], altitude: 120000, heading: 0, heading: 270, color: "rgba(0, 172, 209, 0.75)" },
+            { routeId: 20, routeName: "鹿島線", coords: kashimaLineCoords, position: kashimaLineCoords[0], altitude: 60000, heading: 0, color: "rgba(168, 95, 18, 0.75)" },
+            { routeId: 21, routeName: "川越線(川越-高麗川間)", coords: kawagoeLineBetweenCoords, position: kawagoeLineBetweenCoords[0], altitude: 50000, heading: 0, color: "rgba(166, 169, 171, 0.75)" },
+            { routeId: 22, routeName: "京浜東北線・根岸線", coords: keihinTohokuNegishiLineCoords, position: keihinTohokuNegishiLineCoords[0], altitude: 100000, heading: 315, color: "rgba(0, 167, 227, 0.75)" },
+            { routeId: 23, routeName: "京葉線", coords: keiyoLineCoords, position: keiyoLineCoords[0], altitude: 70000, heading: 0, color: "rgba(207, 18, 37, 0.75)" },
+            { routeId: 24, routeName: "久留里線", coords: kururiLineCoords, position: kururiLineCoords[0], altitude: 70000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
+            { routeId: 25, routeName: "武蔵野線", coords: musashinoLineCoords, position: musashinoLineCoords[0], altitude: 80000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+            { routeId: 26, routeName: "南武線", coords: nambuLineCoords, position: nambuLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 228, 0, 0.75)" },
+            { routeId: 27, routeName: "成田線", coords: naritaLineCoords, position: naritaLineCoords[0], altitude: 100000, heading: 0, color: "rgba(0, 187, 133, 0.75)" },
+            { routeId: 28, routeName: "青梅線", coords: omeLineCoords, position: omeLineCoords[0], altitude: 60000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+            { routeId: 29, routeName: "相模線", coords: sagamiLineCoords, position: sagamiLineCoords[0], altitude: 80000, heading: 270, color: "rgba(0, 139, 139, 0.75)" },
+            { routeId: 30, routeName: "埼京線・川越線", coords: saikyoKawagoeLineCoords, position: saikyoKawagoeLineCoords[0], altitude: 100000, heading: 0, color: "rgba(0, 172, 132, 0.75)" },
+            { routeId: 31, routeName: "湘南新宿ライン", coords: shonanShinjukuLineCoords, position: shonanShinjukuLineCoords[0], altitude: 100000, heading: 270, color: "rgba(222, 5, 21, 0.75)" },
+            { routeId: 32, routeName: "総武本線", coords: sobuMainLineCoords, position: sobuMainLineCoords[0], altitude: 90000, heading: 0, color: "rgba(253, 215, 0, 0.75)" },
+            { routeId: 33, routeName: "総武快速線", coords: sobuRapidLineCoords, position: sobuRapidLineCoords[0], altitude: 70000, heading: 0, color: "rgba(0, 116, 190, 0.75)" },
+            { routeId: 34, routeName: "相鉄直通線", coords: sotetsuDirectLineCoords, position: sotetsuDirectLineCoords[0], altitude: 60000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
+            { routeId: 35, routeName: "外房線", coords: sotoboLineCoords, position: sotoboLineCoords[0], altitude: 100000, heading: 0, color: "rgba(242, 35, 53, 0.75)" },
+            { routeId: 36, routeName: "高崎線", coords: takasakiLineCoords, position: takasakiLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
+            { routeId: 37, routeName: "東金線", coords: toganeLineCoords, position: toganeLineCoords[0], altitude: 120000, heading: 0, color: "rgba(179, 28, 49, 0.75)" },
+            { routeId: 38, routeName: "東海道線", coords: tokaidoLineCoords, position: tokaidoLineCoords[0], altitude: 120000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
+            { routeId: 39, routeName: "鶴見線", coords: tsurumiLineCoords, position: tsurumiLineCoords[0], altitude: 10000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
+            { routeId: 40, routeName: "内房線", coords: uchiboLineCoords, position: uchiboLineCoords[0], altitude: 120000, heading: 0, color: "rgba(0, 113, 197, 0.75)" },
+            { routeId: 41, routeName: "宇都宮線", coords: utsunomiyaLineCoords, position: utsunomiyaLineCoords[0], altitude: 150000, heading: 270, color: "rgba(255, 152, 69, 0.75)" },
+            { routeId: 42, routeName: "山手線", coords: yamanoteLineCoords, position: yamanoteLineCoords[0], altitude: 30000, heading: 0, color: "rgba(133, 192, 35, 0.75)" },
+            { routeId: 43, routeName: "横浜線", coords: yokohamaLineCoords, position: yokohamaLineCoords[0], altitude: 70000, heading: 0, color: "rgba(133, 192, 35, 0.75)" },
+            { routeId: 44, routeName: "横須賀線", coords: yokosukaLineCoords, position: yokosukaLineCoords[0], altitude: 90000, heading: 45, color: "rgba(0, 116, 190, 0.75)" }
       ];
+
+      routesData.forEach(route => {
+        if (route.coords && route.coords.length > 1) {
+            // 最初の駅と最後の駅の中間地点を計算
+            const firstStation = route.coords[0];
+            const lastStation = route.coords[route.coords.length - 1];
+            const midpoint = {
+                lat: (firstStation.lat + lastStation.lat) / 2,
+                lng: (firstStation.lng + lastStation.lng) / 2
+            };
+            route.position = midpoint;
+        }
+      });
 
       // 駅ボタンを再生成する際に使う一時コンテナ
       // (新しい路線ボタンを押すたび、以前の駅ボタンを消すために利用)
@@ -2028,7 +2290,7 @@
 
         // Homeボタンを先に追加
         const homeBtn = document.createElement("button");
-        homeBtn.textContent = "Home";
+        homeBtn.textContent = "ホーム";
         homeBtn.addEventListener("click", () => {
           // 画面をリロードして初期状態に戻す
           location.reload();
@@ -2037,7 +2299,7 @@
 
         // Aroundボタン
         const aroundBtn = document.createElement("button");
-        aroundBtn.textContent = "Around";
+        aroundBtn.textContent = "回転";
         aroundBtn.addEventListener("click", () => {
             // flyCameraButtonのクリックイベントをシミュレート
             const flyCameraButton = document.getElementById('flyCameraButton');
@@ -2077,7 +2339,7 @@
 
         // Alertボタン
         const alertBtn = document.createElement("button");
-        alertBtn.textContent = "Alert";
+        alertBtn.textContent = "運行情報";
         alertBtn.addEventListener("click", async () => {
         await fetchAlertData();  // 後述の fetchAlertData() を呼び出す
         });
@@ -2085,7 +2347,7 @@
 
         // Tripupdatesボタン
         const tripupdatesBtn = document.createElement("button");
-        tripupdatesBtn.textContent = "Tripupdates";
+        tripupdatesBtn.textContent = "ルート最新情報";
         tripupdatesBtn.addEventListener("click", async () => {
         await fetchTripupdatesData();  // 後述の fetchTripupdatesData() を呼び出す
         });
@@ -2097,11 +2359,12 @@
         removeStationsBtn.addEventListener("click", () => {
             removeMarkers(stationMarkers); // 駅マーカーを削除
         });
+        removeStationsBtn.style.display = "none"; // 非表示に設定
         container.appendChild(removeStationsBtn);
 
         // Vehicle削除ボタン
         const removeVehiclesBtn = document.createElement("button");
-        removeVehiclesBtn.textContent = "Vehicle削除";
+        removeVehiclesBtn.textContent = "車両削除";
         removeVehiclesBtn.addEventListener("click", () => {
             removeMarkers(vehicleMarkers); // Vehicleマーカーを削除
             // dataTableのデータを初期化
@@ -2110,6 +2373,7 @@
                 dataTableBody.innerHTML = ""; // テーブルの内容をクリア
             }
         });
+        removeVehiclesBtn.style.display = "none"; // 非表示に設定
         container.appendChild(removeVehiclesBtn);
 
         // 1. 「路線図」ボタン
@@ -2120,10 +2384,15 @@
         });
         container.appendChild(allLineBtn);
 
+        const lineBreak = document.createElement("br");
+        container.appendChild(lineBreak);
+
         // 2. 各路線ボタン + 子ボタンコンテナ
         routesData.forEach((route) => {
           const routeBtn = document.createElement("button");
           routeBtn.textContent = route.routeName;
+          // 背景色を設定
+          // routeBtn.style.backgroundColor = route.color;
 
           // サブコンテナ (Station/Vehicle/駅リスト)
           const subContainer = document.createElement("div");
@@ -2131,13 +2400,26 @@
           
           // 路線ボタンのクリックイベントに flyTo を追加
           routeBtn.addEventListener("click", () => {
+              // 駅削除ボタンの処理を実行
+              removeMarkers(stationMarkers);
+
+              // 車両削除ボタンの処理を実行
+              removeMarkers(vehicleMarkers);
+              const dataTableBody = document.getElementById("dataTable").querySelector("tbody");
+              if (dataTableBody) {
+                  dataTableBody.innerHTML = ""; // テーブルの内容をクリア
+              }
+
+              // その路線の駅を表示
+              showStationsForRoute(route.coords);
+
               if (route.position) {
                   map3DElement.flyCameraTo({
                     endCamera: {
-                      center: { lat: route.position.lat, lng: route.position.lng, altitude: 1000 },
-                      tilt: 75,
-                      heading: 0,
-                      range: 3000
+                      center: { lat: route.position.lat, lng: route.position.lng, altitude: route.altitude },
+                      tilt: 10,
+                      heading: route.heading,
+                      range: 5000
                     },
                     durationMillis: 5000
                   })
@@ -2151,16 +2433,17 @@
 
           // Station ボタン
           const stationChildBtn = document.createElement("button");
-          stationChildBtn.textContent = "Station";
+          stationChildBtn.textContent = "駅";
           stationChildBtn.style.backgroundColor = "#001633"; 
           // ---- Station ボタンを押したら「その路線の駅をマーカー表示」
           stationChildBtn.addEventListener("click", () => {
             showStationsForRoute(route.coords);
           });
+          stationChildBtn.style.display = "none"; // 非表示に設定
 
           // Vehicle ボタン
           const vehicleChildBtn = document.createElement("button");
-          vehicleChildBtn.textContent = "Vehicle";
+          vehicleChildBtn.textContent = "車両";
           vehicleChildBtn.style.backgroundColor = "#001633";
           vehicleChildBtn.addEventListener("click", () => {
             console.log("Vehicle button pressed - routeId:", route.routeId);
@@ -2780,7 +3063,7 @@
       }
 
       /**
-       * Vehicleボタン用: 「含まれている路線の電車のみ」表示するための例
+       * Vehicleボタン用: 「含まれている路線の車両のみ」表示するための例
        *  - 既存の refreshButton と同じ動作(=全部取得)ではなく、
        *    routeId をサーバーに送って「該当路線の車両データ」だけ返す仕組みを想定
        */
