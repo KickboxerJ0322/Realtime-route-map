@@ -1,9 +1,9 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>リアルタイム路線図 / JR東日本</title>
+    <title>デジタル路線図 / JR東日本</title>
     <!-- Google FontsからPoppinsフォントを読み込む -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
@@ -57,7 +57,7 @@
         }
         /* ボタン全体を半透明黒に設定 */
         button {
-          background-color: rgba(0, 0, 0, 0.6); /* 半透明黒 */
+          background-color: rgba(0, 0, 0, 0.8); /* 半透明黒 */
           border: 1px solid #ccc;
           color: #fff;
           padding: 8px 12px;
@@ -91,7 +91,7 @@
           left: 0;
           width: 300px; /* 幅を300pxに設定 */
           height: calc(100% - 56px);
-          background-color: rgba(0, 0, 0, 0.4); /* 半透明黒 */
+          background-color: rgba(0, 0, 0, 0.6); /* 半透明黒 */
           padding: 4px;
           box-sizing: border-box;
           overflow-y: auto;
@@ -100,16 +100,16 @@
         /* 縮小ボタンのスタイル */
         .leftminimize-button {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background-color: rgba(0, 0, 0, 0.6);
+            top: 2px;
+            right: 2px;
+            background-color: rgba(0, 0, 0, 0.8);
             border: none;
             color: white;
             font-size: 12px;
             cursor: pointer;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -125,7 +125,7 @@
             position: fixed;
             top: 56px;
             left: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.8);
             border: none;
             color: white;
             font-size: 12px;
@@ -146,7 +146,7 @@
           right: 0;
           width: 250px;
           height: calc(100% - 56px);
-          background-color: rgba(0, 0, 0, 0.3); /* 半透明黒 */
+          background-color: rgba(0, 0, 0, 0.6); /* 半透明黒 */
           padding: 10px;
           box-sizing: border-box;
           overflow-y: auto;
@@ -159,8 +159,9 @@
           bottom: 0;
           left: 300px;
           max-height: 30%;
-          min-width: 500px;
-          background-color: rgba(0, 0, 0, 0.3); /* 半透明黒 */
+          min-width: 600px;
+          background-color: rgba(0, 0, 0, 0.6); /* 半透明黒 */
+          overflow-x: auto;
           overflow-y: auto;
           padding: 4px;
           box-sizing: border-box;
@@ -169,16 +170,16 @@
         /* 縮小ボタンのスタイル */
         .minimize-button {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            background-color: rgba(0, 0, 0, 0.6);
+            top: 2px;
+            right: 2px;
+            background-color: rgba(0, 0, 0, 0.8);
             border: none;
             color: white;
             font-size: 12px;
             cursor: pointer;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -194,7 +195,7 @@
             position: fixed;
             bottom: 80px;
             right: 10px;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.8);
             border: none;
             color: white;
             font-size: 12px;
@@ -260,7 +261,7 @@
           text-align: center;
         }
         th {
-          background-color: rgba(0, 0, 0, 0.3);
+          background-color: rgba(0, 0, 0, 0.6);
         }
       
         /* 入力フォームのスタイル */
@@ -316,7 +317,7 @@
         /* スマホ対応（横幅が狭い場合はレイアウトを縦並びに） */
         @media (max-width: 768px) {
             header {
-                font-size: 16px;
+                font-size: 12px;
                 padding: 6px 8px;
                 height: 56px; /* ヘッダーの高さを維持 */
                 z-index: 1002; /* ヘッダーのz-indexを維持 */
@@ -330,7 +331,7 @@
                 left: 0;
                 width: 100%;
                 max-height: 24%;
-                background-color: rgba(0, 0, 0, 0.3); /* 少し濃いめの半透明黒 */
+                background-color: rgba(0, 0, 0, 0.6); /* 少し濃いめの半透明黒 */
                 overflow-y: auto;
                 padding: 8px;
                 box-sizing: border-box;
@@ -344,7 +345,8 @@
                 left: 0;
                 right: 0px;
                 max-height: 24%;
-                background-color: rgba(0, 0, 0, 0.3);
+                background-color: rgba(0, 0, 0, 0.6);
+                overflow-x: auto;
                 overflow-y: auto;
                 padding: 4px;
                 box-sizing: border-box;
@@ -372,7 +374,7 @@
           src="https://kickboxerj0322.github.io/bus-map-3d/066_icon.png"
           alt="バスレーダーアイコン"
         />
-        リアルタイム路線図 / JR東日本
+        デジタル路線図 / JR東日本
       </div>
       <div class="header-right"></div>
         <p class="status-container">
@@ -509,6 +511,10 @@
             <button id="minimizeButton" class="minimize-button">−</button>
   
             <button id="alertToggleButton" class="small-heading">運行情報</button>
+            <button id="tripupdatesButton" class="small-heading">ルート最新情報</button>
+            <button id="stationupdatesButton" class="small-heading">路線・駅情報</button>
+            <button id="busResultsButton" class="small-heading">車両情報</button>
+            <button id="tripsButton" class="small-heading">到着出発情報</button>
             <table id="alertTable" style="display: none;">
               <thead>
                 <tr>
@@ -519,8 +525,7 @@
                 </tr>
               </thead>
               <tbody></tbody>
-            </table>
-            <button id="tripupdatesButton" class="small-heading">ルート最新情報</button>
+            </table>           
             <table id="tripupdatesTable" style="display: none;">
               <thead>
                 <tr>
@@ -531,9 +536,17 @@
                 </tr>
               </thead>
               <tbody></tbody>
+            </table>            
+            <table id="stationupdatesTable" style="display: none;">
+              <thead>
+                <tr>
+                  <th>駅名</th>
+                  <th>駅情報</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
             </table>
-          <!-- バス結果テーブル表示ボタン -->
-          <button id="busResultsButton" class="small-heading">車両情報</button>
+          <!-- バス結果テーブル表示ボタン -->          
           <table id="dataTable" style="display: none">
             <thead>
               <tr>
@@ -602,9 +615,8 @@
               </tr>
             </thead>
             <tbody></tbody>
-          </table>
-          <button id="tripsButton" class="small-heading">到着出発予定</button>
-          <div id="vehicleDetails"></div>
+          </table>          
+          <!-- <div id="vehicleDetails"></div>  -->
           <table id="tripsTable" style="display: none">
             <thead>
               <tr>
@@ -617,7 +629,6 @@
             </thead>
             <tbody></tbody>
           </table>
-
           <!-- 実行結果テーブル表示ボタン -->
           <!-- <button id="executionResultsButton" class="small-heading">Execution results</button>
           <table id="executionTable" style="display: none">
@@ -1755,9 +1766,9 @@
         // 3Dマップ初期表示
         map3DElement = new Map3D({
           center: { lat: 35.75, lng: 139.70, altitude: 1000 },
-          tilt: 45,
+          tilt: 65,
           heading: 0,
-          range: 50000,
+          range: 70000,
           defaultLabelsDisabled: true
         });
         document.getElementById("map3d").append(map3DElement);
@@ -2229,42 +2240,42 @@
         return Math.min(altitude, maxAltitude);
       }
 
-      const routesData = [
-            { routeId: 10, routeName: "吾妻線", coords: agatsumaLineCoords, position: agatsumaLineCoords[0], altitude: 80000, heading: 0, color: "rgba(0, 174, 149, 0.75)" },
-            { routeId: 11, routeName: "中央線快速", coords: chuoRapidLineCoords, position: chuoRapidLineCoords[0], altitude: 80000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 12, routeName: "中央・総武各駅停車", coords: chuoSobuLocalLineCoords, position: chuoSobuLocalLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
-            { routeId: 13, routeName: "八高線", coords: hachikoLineCoords, position: hachikoLineCoords[0], altitude: 130000, heading: 270, color: "rgba(160, 157, 149, 0.75)" },
-            { routeId: 14, routeName: "伊東線", coords: itoLineCoords, position: itoLineCoords[0], altitude: 50000, heading: 270, color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 15, routeName: "五日市線", coords: itsukaichiLineCoords, position: itsukaichiLineCoords[0], altitude: 50000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 16, routeName: "常磐線", coords: jobanLineCoords, position: jobanLineCoords[0], altitude: 150000, heading: 270, color: "rgba(0, 113, 197, 0.75)" },
-            { routeId: 17, routeName: "常磐線各駅停車", coords: jobanLocalLineCoords, position: jobanLocalLineCoords[0], altitude: 70000, heading: 0, color: "rgba(158, 158, 159, 0.75)" },
-            { routeId: 18, routeName: "常磐線快速", coords: jobanRapidLineCoords, position: jobanRapidLineCoords[0], altitude: 90000, heading: 0, color: "rgba(0, 193, 138, 0.75)" },
-            { routeId: 19, routeName: "上越線", coords: joetsuLineCoords, position: joetsuLineCoords[0], altitude: 120000, heading: 0, heading: 270, color: "rgba(0, 172, 209, 0.75)" },
-            { routeId: 20, routeName: "鹿島線", coords: kashimaLineCoords, position: kashimaLineCoords[0], altitude: 60000, heading: 0, color: "rgba(168, 95, 18, 0.75)" },
-            { routeId: 21, routeName: "川越線(川越-高麗川間)", coords: kawagoeLineBetweenCoords, position: kawagoeLineBetweenCoords[0], altitude: 50000, heading: 0, color: "rgba(166, 169, 171, 0.75)" },
-            { routeId: 22, routeName: "京浜東北線・根岸線", coords: keihinTohokuNegishiLineCoords, position: keihinTohokuNegishiLineCoords[0], altitude: 100000, heading: 315, color: "rgba(0, 167, 227, 0.75)" },
-            { routeId: 23, routeName: "京葉線", coords: keiyoLineCoords, position: keiyoLineCoords[0], altitude: 70000, heading: 0, color: "rgba(207, 18, 37, 0.75)" },
-            { routeId: 24, routeName: "久留里線", coords: kururiLineCoords, position: kururiLineCoords[0], altitude: 70000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
-            { routeId: 25, routeName: "武蔵野線", coords: musashinoLineCoords, position: musashinoLineCoords[0], altitude: 80000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 26, routeName: "南武線", coords: nambuLineCoords, position: nambuLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 228, 0, 0.75)" },
-            { routeId: 27, routeName: "成田線", coords: naritaLineCoords, position: naritaLineCoords[0], altitude: 100000, heading: 0, color: "rgba(0, 187, 133, 0.75)" },
-            { routeId: 28, routeName: "青梅線", coords: omeLineCoords, position: omeLineCoords[0], altitude: 60000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
-            { routeId: 29, routeName: "相模線", coords: sagamiLineCoords, position: sagamiLineCoords[0], altitude: 80000, heading: 270, color: "rgba(0, 139, 139, 0.75)" },
-            { routeId: 30, routeName: "埼京線・川越線", coords: saikyoKawagoeLineCoords, position: saikyoKawagoeLineCoords[0], altitude: 100000, heading: 0, color: "rgba(0, 172, 132, 0.75)" },
-            { routeId: 31, routeName: "湘南新宿ライン", coords: shonanShinjukuLineCoords, position: shonanShinjukuLineCoords[0], altitude: 100000, heading: 270, color: "rgba(222, 5, 21, 0.75)" },
-            { routeId: 32, routeName: "総武本線", coords: sobuMainLineCoords, position: sobuMainLineCoords[0], altitude: 90000, heading: 0, color: "rgba(253, 215, 0, 0.75)" },
-            { routeId: 33, routeName: "総武快速線", coords: sobuRapidLineCoords, position: sobuRapidLineCoords[0], altitude: 70000, heading: 0, color: "rgba(0, 116, 190, 0.75)" },
-            { routeId: 34, routeName: "相鉄直通線", coords: sotetsuDirectLineCoords, position: sotetsuDirectLineCoords[0], altitude: 60000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
-            { routeId: 35, routeName: "外房線", coords: sotoboLineCoords, position: sotoboLineCoords[0], altitude: 100000, heading: 0, color: "rgba(242, 35, 53, 0.75)" },
-            { routeId: 36, routeName: "高崎線", coords: takasakiLineCoords, position: takasakiLineCoords[0], altitude: 80000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 37, routeName: "東金線", coords: toganeLineCoords, position: toganeLineCoords[0], altitude: 120000, heading: 0, color: "rgba(179, 28, 49, 0.75)" },
-            { routeId: 38, routeName: "東海道線", coords: tokaidoLineCoords, position: tokaidoLineCoords[0], altitude: 120000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 39, routeName: "鶴見線", coords: tsurumiLineCoords, position: tsurumiLineCoords[0], altitude: 10000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
-            { routeId: 40, routeName: "内房線", coords: uchiboLineCoords, position: uchiboLineCoords[0], altitude: 120000, heading: 0, color: "rgba(0, 113, 197, 0.75)" },
-            { routeId: 41, routeName: "宇都宮線", coords: utsunomiyaLineCoords, position: utsunomiyaLineCoords[0], altitude: 150000, heading: 270, color: "rgba(255, 152, 69, 0.75)" },
-            { routeId: 42, routeName: "山手線", coords: yamanoteLineCoords, position: yamanoteLineCoords[0], altitude: 30000, heading: 0, color: "rgba(133, 192, 35, 0.75)" },
-            { routeId: 43, routeName: "横浜線", coords: yokohamaLineCoords, position: yokohamaLineCoords[0], altitude: 70000, heading: 0, color: "rgba(133, 192, 35, 0.75)" },
-            { routeId: 44, routeName: "横須賀線", coords: yokosukaLineCoords, position: yokosukaLineCoords[0], altitude: 90000, heading: 45, color: "rgba(0, 116, 190, 0.75)" }
+      const routesData = [ 
+          { routeId: 10, routeName: "吾妻線", coords: agatsumaLineCoords, position: agatsumaLineCoords[0], lat: 36.50241, lng: 138.76891, altitude: 100000, heading: 0, color: "rgba(0, 174, 149, 0.75)" }, 
+          { routeId: 11, routeName: "中央線快速", coords: chuoRapidLineCoords, position: chuoRapidLineCoords[0], lat: 35.66177, lng: 139.52489, altitude: 100000, heading: 0, color: "rgba(235, 92, 1, 0.75)" }, 
+          { routeId: 12, routeName: "中央・総武各駅停車", coords: chuoSobuLocalLineCoords, position: chuoSobuLocalLineCoords[0], lat: 35.65815, lng: 139.83710, altitude: 100000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
+          { routeId: 13, routeName: "八高線", coords: hachikoLineCoords, position: hachikoLineCoords[0], lat: 35.98889, lng: 139.17558, altitude: 150000, heading: 45, color: "rgba(160, 157, 149, 0.75)" },
+          { routeId: 14, routeName: "伊東線", coords: itoLineCoords, position: itoLineCoords[0], lat: 35.03920, lng: 139.08496, altitude: 50000, heading: 315, color: "rgba(255, 152, 69, 0.75)" },
+          { routeId: 15, routeName: "五日市線", coords: itsukaichiLineCoords, position: itsukaichiLineCoords[0], lat: 35.72667, lng: 139.28580, altitude: 40000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+          { routeId: 16, routeName: "常磐線", coords: jobanLineCoords, position: jobanLineCoords[0], lat: 36.0786, lng: 140.20624, altitude: 150000, heading: 0, color: "rgba(0, 113, 197, 0.75)" }, //土浦駅
+          { routeId: 17, routeName: "常磐線各駅停車", coords: jobanLocalLineCoords, position: jobanLocalLineCoords[0], lat: 35.82875, lng: 139.94390, altitude: 70000, heading: 0, color: "rgba(158, 158, 159, 0.75)" },
+          { routeId: 18, routeName: "常磐線快速", coords: jobanRapidLineCoords, position: jobanRapidLineCoords[0], lat: 35.70200, lng: 139.90102, altitude: 100000, heading: 0, color: "rgba(0, 193, 138, 0.75)" },
+          { routeId: 19, routeName: "上越線", coords: joetsuLineCoords, position: joetsuLineCoords[0], lat: 36.36502, lng: 139.22316, altitude: 170000, heading: 315, color: "rgba(0, 172, 209, 0.75)" },
+          { routeId: 20, routeName: "鹿島線", coords: kashimaLineCoords, position: kashimaLineCoords[0], lat: 35.94400, lng: 140.56484, altitude: 60000, heading: 0, color: "rgba(168, 95, 18, 0.75)" },
+          { routeId: 21, routeName: "川越線", coords: kawagoeLineBetweenCoords, position: kawagoeLineBetweenCoords[0], lat: 35.90153, lng: 139.41067, altitude: 50000, heading: 0, color: "rgba(166, 169, 171, 0.75)" },
+          { routeId: 22, routeName: "京浜東北線", coords: keihinTohokuNegishiLineCoords, position: keihinTohokuNegishiLineCoords[0], lat: 35.60018, lng: 139.57774, altitude: 140000, heading: 315, color: "rgba(0, 167, 227, 0.75)" },
+          { routeId: 23, routeName: "京葉線", coords: keiyoLineCoords, position: keiyoLineCoords[0], lat: 35.62992, lng: 139.94799, altitude: 70000, heading: 0, color: "rgba(207, 18, 37, 0.75)" },
+          { routeId: 24, routeName: "久留里線", coords: kururiLineCoords, position: kururiLineCoords[0], lat: 35.3074, lng: 140.00782, altitude: 70000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
+          { routeId: 25, routeName: "武蔵野線", coords: musashinoLineCoords, position: musashinoLineCoords[0], lat: 35.68653, lng: 139.71831, altitude: 100000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+          { routeId: 26, routeName: "南武線", coords: nambuLineCoords, position: nambuLineCoords[0], lat: 35.61445, lng: 139.55556, altitude: 100000, heading: 0, color: "rgba(255, 228, 0, 0.75)" },
+          { routeId: 27, routeName: "成田線", coords: naritaLineCoords, position: naritaLineCoords[0], lat: 35.75876, lng: 140.25217, altitude: 150000, heading: 0, color: "rgba(0, 187, 133, 0.75)" },
+          { routeId: 28, routeName: "青梅線", coords: omeLineCoords, position: omeLineCoords[0], lat: 35.75378, lng: 139.25545, altitude: 60000, heading: 0, color: "rgba(235, 92, 1, 0.75)" },
+          { routeId: 29, routeName: "相模線", coords: sagamiLineCoords, position: sagamiLineCoords[0], lat: 35.46276, lng: 139.37606, altitude: 90000, heading: 315, color: "rgba(0, 139, 139, 0.75)" },
+          { routeId: 30, routeName: "埼京線", coords: saikyoKawagoeLineCoords, position: saikyoKawagoeLineCoords[0], lat: 35.76331, lng: 139.60572, altitude: 120000, heading: 0, color: "rgba(0, 172, 132, 0.75)" },
+          { routeId: 31, routeName: "湘南新宿ライン", coords: shonanShinjukuLineCoords, position: shonanShinjukuLineCoords[0], lat: 35.63021, lng: 139.57756, altitude: 150000, heading: 315, color: "rgba(222, 5, 21, 0.75)" },
+          { routeId: 32, routeName: "総武本線", coords: sobuMainLineCoords, position: sobuMainLineCoords[0], lat: 35.6827, lng: 140.4401, altitude: 120000, heading: 0, color: "rgba(253, 215, 0, 0.75)" },
+          { routeId: 33, routeName: "総武快速線", coords: sobuRapidLineCoords, position: sobuRapidLineCoords[0], lat: 35.64741, lng: 139.94004, altitude: 70000, heading: 0, color: "rgba(0, 116, 190, 0.75)" },
+          { routeId: 34, routeName: "相鉄直通線", coords: sotetsuDirectLineCoords, position: sotetsuDirectLineCoords[0], lat: 35.55059, lng: 139.65719, altitude: 60000, heading: 0, color: "rgba(0, 195, 167, 0.75)" },
+          { routeId: 35, routeName: "外房線", coords: sotoboLineCoords, position: sotoboLineCoords[0], lat: 35.36039, lng: 140.10840, altitude: 150000, heading: 0, color: "rgba(242, 35, 53, 0.75)" },
+          { routeId: 36, routeName: "高崎線", coords: takasakiLineCoords, position: takasakiLineCoords[0], lat: 35.93863, lng: 139.45695, altitude: 150000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
+          { routeId: 37, routeName: "東金線", coords: toganeLineCoords, position: toganeLineCoords[0], lat: 35.56578, lng: 140.36086, altitude: 90000, heading: 0, color: "rgba(179, 28, 49, 0.75)" },
+          { routeId: 38, routeName: "東海道線", coords: tokaidoLineCoords, position: tokaidoLineCoords[0], lat: 35.41367, lng: 139.43437, altitude: 120000, heading: 0, color: "rgba(255, 152, 69, 0.75)" },
+          { routeId: 39, routeName: "鶴見線", coords: tsurumiLineCoords, position: tsurumiLineCoords[0], lat: 35.50484, lng: 139.69911, altitude: 10000, heading: 0, color: "rgba(255, 229, 0, 0.75)" },
+          { routeId: 40, routeName: "内房線", coords: uchiboLineCoords, position: uchiboLineCoords[0], lat: 35.36039, lng: 140.10840, altitude: 120000, heading: 0, color: "rgba(0, 113, 197, 0.75)" },
+          { routeId: 41, routeName: "宇都宮線", coords: utsunomiyaLineCoords, position: utsunomiyaLineCoords[0], lat: 36.32567, lng: 139.91334, altitude: 150000, heading: 270, color: "rgba(255, 152, 69, 0.75)" },
+          { routeId: 42, routeName: "山手線", coords: yamanoteLineCoords, position: yamanoteLineCoords[0], lat: 35.6570, lng: 139.73042393956396, altitude: 40000, heading: 0, color: "rgba(133, 192, 35, 0.75)" }, //中間地点
+          { routeId: 43, routeName: "横浜線", coords: yokohamaLineCoords, position: yokohamaLineCoords[0], lat: 35.56646, lng: 139.48671, altitude: 70000, heading: 0, color: "rgba(133, 192, 35, 0.75)" },
+          { routeId: 44, routeName: "横須賀線", coords: yokosukaLineCoords, position: yokosukaLineCoords[0], lat: 35.45720, lng: 139.73372, altitude: 150000, heading: 0, color: "rgba(0, 116, 190, 0.75)" }
       ];
 
       routesData.forEach(route => {
@@ -2311,35 +2322,10 @@
         });
         // ボタンをコンテナに追加
         container.appendChild(aroundBtn);
-
-        // Labelsスイッチ
-        const labelsContainer = document.createElement("div");
-        labelsContainer.style.display = "inline-block";
-        labelsContainer.style.marginLeft = "10px";
-
-        const labelsLabel = document.createElement("label");
-        labelsLabel.textContent = "Labels";
-        labelsLabel.style.marginRight = "5px";
-
-        const labelsSwitch = document.createElement("input");
-        labelsSwitch.type = "checkbox";
-        labelsSwitch.id = "labelsSwitch";
-        labelsSwitch.checked = false; // デフォルトはオフ
-
-        labelsSwitch.addEventListener("change", () => {
-            playSound();
-            if (map3DElement) {
-                map3DElement.defaultLabelsDisabled = !labelsSwitch.checked;
-            }
-        });
-
-        labelsContainer.appendChild(labelsLabel);
-        labelsContainer.appendChild(labelsSwitch);
-        container.appendChild(labelsContainer);
-
+        
         // Alertボタン
         const alertBtn = document.createElement("button");
-        alertBtn.textContent = "運行情報";
+        alertBtn.textContent = "運行";
         alertBtn.addEventListener("click", async () => {
         await fetchAlertData();  // 後述の fetchAlertData() を呼び出す
         });
@@ -2347,7 +2333,7 @@
 
         // Tripupdatesボタン
         const tripupdatesBtn = document.createElement("button");
-        tripupdatesBtn.textContent = "ルート最新情報";
+        tripupdatesBtn.textContent = "ルート";
         tripupdatesBtn.addEventListener("click", async () => {
         await fetchTripupdatesData();  // 後述の fetchTripupdatesData() を呼び出す
         });
@@ -2380,9 +2366,35 @@
         const allLineBtn = document.createElement("button");
         allLineBtn.textContent = "全体路線図";
         allLineBtn.addEventListener("click", () => {
-          flyToAllLine(); 
+          flyToAllLine();
+          playSound(); 
         });
         container.appendChild(allLineBtn);
+
+        // Labelsスイッチ
+        const labelsContainer = document.createElement("div");
+        labelsContainer.style.display = "inline-block";
+        labelsContainer.style.marginLeft = "10px";
+
+        const labelsLabel = document.createElement("label");
+        labelsLabel.textContent = "ラベル";
+        labelsLabel.style.marginRight = "5px";
+
+        const labelsSwitch = document.createElement("input");
+        labelsSwitch.type = "checkbox";
+        labelsSwitch.id = "labelsSwitch";
+        labelsSwitch.checked = false; // デフォルトはオフ
+
+        labelsSwitch.addEventListener("change", () => {
+            playSound();
+            if (map3DElement) {
+                map3DElement.defaultLabelsDisabled = !labelsSwitch.checked;
+            }
+        });
+
+        labelsContainer.appendChild(labelsLabel);
+        labelsContainer.appendChild(labelsSwitch);
+        container.appendChild(labelsContainer);
 
         const lineBreak = document.createElement("br");
         container.appendChild(lineBreak);
@@ -2399,7 +2411,7 @@
           subContainer.style.display = "none"; // 初期は非表示
           
           // 路線ボタンのクリックイベントに flyTo を追加
-          routeBtn.addEventListener("click", () => {
+          routeBtn.addEventListener("click", async () => { // async を追加
               // 駅削除ボタンの処理を実行
               removeMarkers(stationMarkers);
 
@@ -2410,13 +2422,31 @@
                   dataTableBody.innerHTML = ""; // テーブルの内容をクリア
               }
 
+              const dataTable = document.getElementById("dataTable");
+              if (dataTable) {
+                  /* tripsTable.innerHTML = ""; */
+                  dataTable.style.display = "none";     // 非表示に設定
+              }
+
+              const vehicleDetails = document.getElementById("vehicleDetails");
+              if (vehicleDetails) {
+                  /* vehicleDetails.innerHTML = ""; */
+                  vehicleDetails.style.display = "none"; // 非表示に設定
+              }
+
+              const tripsTable = document.getElementById("tripsTable");
+              if (tripsTable) {
+                  /* tripsTable.innerHTML = ""; */
+                  tripsTable.style.display = "none";     // 非表示に設定
+              }
+
               // その路線の駅を表示
               showStationsForRoute(route.coords);
 
               if (route.position) {
                   map3DElement.flyCameraTo({
                     endCamera: {
-                      center: { lat: route.position.lat, lng: route.position.lng, altitude: route.altitude },
+                      center: { lat: route.lat, lng: route.lng, altitude: route.altitude },
                       tilt: 10,
                       heading: route.heading,
                       range: 5000
@@ -2426,6 +2456,16 @@
               }
               // サブコンテナの表示トグル
               subContainer.style.display = (subContainer.style.display === "none") ? "block" : "none";
+              // 路線名でWikipediaから情報を取得
+              const routeName = route.routeName;
+              const wikiExtractHTML = await fetchWikipediaExtractHTML(routeName);
+
+              if (wikiExtractHTML) {
+                  updateStationupdatesTable(routeName, wikiExtractHTML);
+              } else {
+                  console.warn(`Wikipediaからデータが取得できませんでした: ${routeName}`);
+                  updateStationupdatesTable(routeName, null);
+              }
           });
 
           container.appendChild(routeBtn);
@@ -2450,14 +2490,36 @@
             refreshVehiclesForRoute(route.routeId);
           });
 
-          // 駅ボタン: route.coords の全駅を個別ボタン
+          // 駅ボタン: route.coords の全駅を個別ボタン 
           route.coords.forEach((station) => {
             const stationBtn = document.createElement("button");
             stationBtn.textContent = station.name;
             stationBtn.style.backgroundColor = "#00377F"; 
-            stationBtn.addEventListener("click", () => {
-              flyToStation(station.lat, station.lng);
+            stationBtn.style.color = "#FFFFFF"; // テキスト色を白に設定
+            /* stationBtn.style.padding = "10px"; // ボタンのパディングを追加
+            stationBtn.style.borderRadius = "5px"; // ボタンの角を丸める
+            stationBtn.style.cursor = "pointer"; // ホバー時のカーソルをポインターに変更
+            stationBtn.style.fontSize = "14px"; // フォントサイズを調整（オプション） */
+            
+            // クリックイベントリスナーを1つに統合
+            stationBtn.addEventListener("click", async () => {
+                // 地図を指定された駅の位置に飛ばす
+                flyToStation(station.lat, station.lng);
+
+                // 駅名に「駅」を付加してWikipediaから駅情報を取得
+                const stationNameWithSuffix = `${station.name}駅`;
+                const wikiExtractHTML = await fetchWikipediaExtractHTML(stationNameWithSuffix);
+
+                // データが取得できた場合にテーブルを更新
+                if (wikiExtractHTML) {
+                    updateStationupdatesTable(stationNameWithSuffix, wikiExtractHTML);
+                } else {
+                    console.warn(`Wikipediaからデータが取得できませんでした: ${stationNameWithSuffix}`);
+                    // 必要に応じてエラーメッセージをUI上に表示
+                    updateStationupdatesTable(stationNameWithSuffix, null);
+                }
             });
+
             subContainer.appendChild(stationBtn);
           });
 
@@ -2469,12 +2531,13 @@
         // テキストを追加
         const infoText = document.createElement("div");
         infoText.style.color = "white"; // フォントの色
-        infoText.style.fontSize = "10px"; // フォントサイズ
-        infoText.style.marginTop = "20px"; // 路線ボタンの下にスペースを確保
+        infoText.style.fontSize = "12px"; // フォントサイズ
+        infoText.style.marginTop = "4px"; // 路線ボタンの下にスペースを確保
 
         infoText.innerHTML = `
-            東日本旅客鉄道(JR東日本)の関東エリアの一部の路線について、GTFS-RT形式による鉄道関連リアルタイム情報を提供します。 / Train realtime information of JR East<br>
-            東京都、神奈川県、埼玉県とその周辺の一部の在来線を対象とします。<br>
+            路線・駅情報については、ウィキメディア REST APIを使用しています。<br>
+            車両情報については、東日本旅客鉄道(JR東日本)によるGTFS-RT形式による鉄道関連リアルタイム情報を使用しています。 / Train realtime information of JR East<br>
+            関東エリアの一部の路線、東京都、神奈川県、埼玉県とその周辺の一部の在来線を対象とします。<br>
             新幹線は含みません。<br>
             相模線、鶴見線、南武支線、八高線は含みません。<br>
             常磐線は羽鳥以南のみ、高崎線は神保原以南のみ、青梅線は立川-青梅間のみを対象とします。<br>
@@ -2554,6 +2617,7 @@
           const rows = data.values || [];
           console.log("Google Sheets data rows:", rows);
           updateAlertTable(rows);
+          alertTable.style.display = 'table';
         } catch (error) {
           console.error("Error in fetchAlertData:", error.message);
         }
@@ -2595,8 +2659,27 @@
           const rows = data.values || [];
           console.log("Google Sheets data rows:", rows);
           updateTripupdatesTable(rows);
+          tripupdatesTable.style.display = 'table';
         } catch (error) {
           console.error("Error in fetchTripupdatesData:", error.message);
+        }
+      }
+
+      // Wikipediaから駅のextract_htmlを取得する関数
+      async function fetchWikipediaExtractHTML(stationName) {
+        try {
+            // 駅名をエンコードしてAPI URLを生成
+            const apiUrl = `https://ja.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(stationName)}`;
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                console.error(`Wikipedia APIエラー: ステータス ${response.status}`);
+                return null;
+            }
+            const data = await response.json();
+            return data.extract_html || null; // extract_htmlを返す
+        } catch (error) {
+            console.error("Wikipediaデータの取得中にエラーが発生しました:", error);
+            return null;
         }
       }
 
@@ -2628,6 +2711,42 @@
         });
       }
 
+      // StationupdatesTableを更新する関数（ヘッダー行なし）
+      function updateStationupdatesTable(stationName, extractHTML) {
+        const table = document.getElementById("stationupdatesTable"); // IDを確認
+
+        if (!table) {
+            console.error("stationupdatesTable要素が見つかりません。");
+            return;
+        }
+
+        // 既存のテーブルデータをクリア
+        table.innerHTML = "";
+
+        // データ行を作成
+        const tr = document.createElement("tr");
+
+        // 駅名セル
+        const tdName = document.createElement("td");
+        tdName.textContent = stationName;
+        tdName.style.padding = "10px";
+        tdName.style.border = "1px solid #ddd";
+        tr.appendChild(tdName);
+
+        // 駅情報セル
+        const tdInfo = document.createElement("td");
+        if (extractHTML) {
+            tdInfo.innerHTML = extractHTML; // HTMLを挿入
+        } else {
+            tdInfo.textContent = "情報が見つかりませんでした。";
+        }
+        tdInfo.style.padding = "10px";
+        tdInfo.style.border = "1px solid #ddd";
+        tr.appendChild(tdInfo);
+        table.appendChild(tr);
+        table.style.display = 'table';
+      }
+
       // Alertテーブルの表示・非表示を切り替えるイベント
       document.getElementById('alertToggleButton').addEventListener('click', () => {
           const table = document.getElementById('alertTable');
@@ -2648,12 +2767,22 @@
         }
       });
 
+      // stationupdatesテーブルの表示・非表示を切り替えるイベント
+      document.getElementById('stationupdatesButton').addEventListener('click', () => {
+        const table = document.getElementById('stationupdatesTable');
+        if (table.style.display === 'none') {
+        table.style.display = 'table';
+        } else {
+        table.style.display = 'none';
+        }
+      });
+
       function flyToAllLine() {
         const defaultCenter = { lat: 35.75, lng: 139.70, altitude: 1000 }; // altitude を追加
-        const defaultTilt = 45;
+        const defaultTilt = 65;
         const defaultHeading = 0;
-        const defaultRange = 50000; // 全体を見渡せる範囲
-    
+        const defaultRange = 70000; // 全体を見渡せる範囲
+   
         map3DElement.flyCameraTo({
             endCamera: {
                 center: defaultCenter,
@@ -2663,18 +2792,44 @@
             },
             durationMillis: 5000
         });
+        // 駅削除ボタンの処理を実行
+        removeMarkers(stationMarkers);
+        // 車両削除ボタンの処理を実行
+        removeMarkers(vehicleMarkers);
+        const dataTableBody = document.getElementById("dataTable").querySelector("tbody");
+        if (dataTableBody) {
+            dataTableBody.innerHTML = ""; // テーブルの内容をクリア
+        }
+
+        const dataTable = document.getElementById("dataTable");
+        if (dataTable) {
+            /* tripsTable.innerHTML = ""; */
+            dataTable.style.display = "none";     // 非表示に設定
+        }
+
+        const vehicleDetails = document.getElementById("vehicleDetails");
+        if (vehicleDetails) {
+            /* vehicleDetails.innerHTML = ""; */
+            vehicleDetails.style.display = "none"; // 非表示に設定
+        }
+
+        const tripsTable = document.getElementById("tripsTable");
+        if (tripsTable) {
+            /* tripsTable.innerHTML = ""; */
+            tripsTable.style.display = "none";     // 非表示に設定
+        }
       }
 
       function flyToStation(lat, lng) {
         // 適宜 elevation を取得する場合はここで取得し、alt に反映
-        const alt = 50; // 例: 固定で 50
+        const alt = 100; // 例: 固定で 50
       
         map3DElement.flyCameraTo({
           endCamera: {
             center: { lat, lng, altitude: alt },
-            tilt: 65,
+            tilt: 80,
             heading: 0,
-            range: 300
+            range: 1000
           },
           durationMillis: 5000
         })
@@ -3021,7 +3176,7 @@
             scale: 0.7,
             background: 'white',
             borderColor: 'black',
-            glyph: 'S',
+            glyph: '駅',
             glyphColor: 'black',
           });
           marker3D.append(pinBg);
@@ -3082,6 +3237,7 @@
         }, 1000);
 
         playAudioThreeTimes();
+        dataTable.style.display = 'table';
       }
 
       async function sendRequest(vehicleId = '', routeId = '') {
@@ -3315,7 +3471,7 @@
         detailTable.border = "1";
       
         // ヘッダーを作成
-        const headers = ["Alphabet ID", "Vehicle ID", "Lat", "Lng", "Date", "Dest", "Route"];
+        const headers = ["アルファベットID", "車両ID", "緯度", "経度", "日時", "目的地", "路線名"];
         const headerRow = document.createElement("tr");
         headers.forEach((header) => {
           const th = document.createElement("th");
@@ -3336,8 +3492,13 @@
         detailContainer.appendChild(detailTable);
       }
 
+      /* function hideDetail() {
+        const detailContainer = document.getElementById("vehicleDetails");
+        detailContainer.style.display = "none";
+      } */
+
       // Googleスプレッドシートの基本APIエンドポイント
-      let SHEET_BASE_URL = "https://sheets.googleapis.com/v4/spreadsheets/1I9BMCFeELOdDEAuJGEkSF2hD00K8KOLyhso9hI1YfP4/values";
+      /* let SHEET_BASE_URL = "https://sheets.googleapis.com/v4/spreadsheets/1I9BMCFeELOdDEAuJGEkSF2hD00K8KOLyhso9hI1YfP4/values"; */
 
       // Vehicle IDに基づいてデータを取得して表示
       async function fetchAndDisplayData(vehicleId) {
@@ -3346,15 +3507,18 @@
         // Vehicle ID の最初の2文字が22以下の場合にSHEET_BASE_URLを変更
         const prefix = vehicleId.substring(0, 2);
         if (!isNaN(prefix) && Number(prefix) <= 22) {
-        SHEET_BASE_URL = "https://sheets.googleapis.com/v4/spreadsheets/1xI4Qb3G4aQ9I6rt_SmiZaMgOq87er3druci_kUEEjdM/values";
-        }       
-        // シート名を動的に決定
-        if (!isNaN(prefix) && prefix.length === 2) {
+          // <=22 は こちら
+          SHEET_BASE_URL = "https://sheets.googleapis.com/v4/spreadsheets/1xI4Qb3G4aQ9I6rt_SmiZaMgOq87er3druci_kUEEjdM/values";
+          sheetName = `work${prefix}`;
+        } else if (!isNaN(prefix) && Number(prefix) >= 23) {
+          // >=23 は こちら
+          SHEET_BASE_URL = "https://sheets.googleapis.com/v4/spreadsheets/1I9BMCFeELOdDEAuJGEkSF2hD00K8KOLyhso9hI1YfP4/values";
           sheetName = `work${prefix}`;
         } else {
+          // 万が一、prefix が数字以外 etc.
           console.error("Unsupported Vehicle ID prefix. Skipping data fetch.");
           return;
-        }
+        }       
 
         try {
           // APIキーを取得
@@ -3390,7 +3554,11 @@
       function updateTable(data, vehicleId) {
         const tableBody = document.getElementById("tripsTable").querySelector("tbody");
         tableBody.innerHTML = ""; // 既存のデータをクリア
-      
+        // tripsTable を表示する
+        const tripsTable = document.getElementById("tripsTable");
+        if (tripsTable) {
+            tripsTable.style.display = "table"; // または "block" に設定
+        }     
         // データがない場合の処理
         if (data.length === 0) {
           const tr = document.createElement("tr");
@@ -3412,6 +3580,8 @@
           });
           tableBody.appendChild(tr);
         });
+        playAudioThreeTimes();
+        tripsTable.style.display = 'table';
       }
       
       const vehicleMarkers = [];
@@ -3474,7 +3644,7 @@
     
             const marker3D = new Marker3DElement({ position });
             const pinBackground = new PinElement({
-                scale: 0.7,
+                scale: 1.0,
                 background: routeColor,
                 borderColor: "rgba(0, 0, 0, 0.75)",
                 glyph: label,
