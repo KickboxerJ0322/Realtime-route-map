@@ -67,13 +67,27 @@
           font-size: 14px;
           box-sizing: border-box;
           width: auto; /* 必要に応じて変更 */
-        }
-      
+        }      
         /* ボタンホバー時の背景色変更 */
         button:hover {
           background-color: rgba(255, 255, 255, 0.2);
-        }
-      
+        }      
+        .small-heading {
+          background-color: rgba(139, 0, 0, 0.8); 
+          border: 1px solid #ccc;
+          color: #fff;
+          padding: 8px 12px;
+          margin: 4px 4px 4px 0;
+          cursor: pointer;
+          border-radius: 4px;
+          font-size: 14px;
+          box-sizing: border-box;
+          width: auto; /* 必要に応じて変更 */
+        }          
+        /* 縮小ボタンホバー時のスタイル */
+        .small-heading:hover {
+          background-color: rgba(255, 182, 193, 0.8);
+        }      
         /* メインコンテナのスタイル */
         #main-container {
             position: relative;
@@ -99,9 +113,9 @@
         }
         /* 縮小ボタンのスタイル */
         .leftminimize-button {
-            position: absolute;
-            top: 2px;
-            right: 2px;
+            position: fixed;
+            top: 56px;
+            left: 255px;
             background-color: rgba(0, 0, 0, 0.8);
             border: none;
             color: white;
@@ -113,13 +127,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        
+        }        
         /* 縮小ボタンホバー時のスタイル */
         .leftminimize-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
-        }
-        
+        }        
         /* 表示ボタンのスタイル */
         .leftshow-button {
             position: fixed;
@@ -318,7 +330,7 @@
         /* スマホ対応（横幅が狭い場合はレイアウトを縦並びに） */
         @media (max-width: 768px) {
             header {
-                font-size: 18px;
+                font-size: 14px;
                 padding: 6px 8px;
                 height: 56px; /* ヘッダーの高さを維持 */
                 z-index: 1002; /* ヘッダーのz-indexを維持 */
@@ -351,6 +363,10 @@
                 right: 10px;
                 bottom: 120px; /* 高さを調整 */
               }
+              .leftminimize-button {
+                left: auto; /* 左の位置を無効化 */
+                right: 10px; /* 右の位置を設定 */
+              }            
               /* メインコンテナのマージンをリセット */
               #main-container {
                 margin-top: 0;
@@ -402,7 +418,7 @@
           <button id="stationupdatesButton" class="small-heading">路線・駅情報</button>
           <button id="busResultsButton" class="small-heading">車両情報</button>
           <button id="tripsButton" class="small-heading">到着出発情報</button>
-          <button id="moreOptionsButton">Others</button>
+          <button id="moreOptionsButton" class="small-heading">設定</button>
         </div>
         <!-- その他オプション（折りたたみ） -->
         <div id="moreOptions">
@@ -1649,6 +1665,13 @@
           range: 70000,
           defaultLabelsDisabled: true
         });
+        // 日本の境界を設定
+        map3DElement.bounds = {
+          south: 24.396308,  // 南端（沖縄付近）
+          west: 122.93457,   // 西端（与那国島付近）
+          north: 45.551483,  // 北端（北海道宗谷岬付近）
+          east: 153.986672   // 東端（小笠原諸島付近）
+        };
         document.getElementById("map3d").append(map3DElement);
 
         // 吾妻線
@@ -2336,9 +2359,15 @@
               showStationsForRoute(route.coords);
 
               if (route.position) {
+                  let finalAltitude = route.altitude;
+                  if (window.matchMedia("(max-width: 480px)").matches) {
+                    finalAltitude += 20000;
+                  } else if (window.matchMedia("(max-width: 768px)").matches) {
+                    finalAltitude += 10000;
+                  }
                   map3DElement.flyCameraTo({
                     endCamera: {
-                      center: { lat: route.lat, lng: route.lng, altitude: route.altitude },
+                      center: { lat: route.lat, lng: route.lng, altitude: finalAltitude },
                       tilt: 10,
                       heading: route.heading,
                       range: 5000
